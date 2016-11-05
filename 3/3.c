@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
 
 int BUF_SIZE = 1000;
 int END = -1;
@@ -14,7 +16,7 @@ int unpackSparse(char *name) {
 	int n;
 	char buffer[BUF_SIZE];
 	int nullCount = 0;
-	int error;
+	int error = 0;
 
 	while ((n = read(0, buffer, BUF_SIZE)) != 0) {
 		int i;
@@ -22,9 +24,10 @@ int unpackSparse(char *name) {
 			if (buffer[i] == 0) {
 				nullCount++;
 			} else {
-				lseek(fd, nullCount, SEEK_CUR);
+				if (nullCount != 0)
+				error = lseek(fd, nullCount, SEEK_CUR);
 				nullCount = 0;	
-				error = write(fd, buffer[i], 1);
+				error = write(fd, &buffer[i], 1);
 				if (error < 0) {
 					printf("Cannot write to file %s\n", name);
 					return 2;
