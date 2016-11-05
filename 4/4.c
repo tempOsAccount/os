@@ -8,10 +8,12 @@
 
 #define USERS_COUNT 100
 #define LINE_SIZE 100
+
 struct user {
 	char name[50];
 	char password[50];
 }; 
+
 struct user USERS[USERS_COUNT];
 char lckFile[40];
 
@@ -31,8 +33,8 @@ int waitUnlock(char *lck) {
 	return 0;
 }
 
-char * getLckName(char *name) {
-	int nameLength = sizeof(name) / sizeof(name[0]);
+char* getLckName(char *name) {
+    int nameLength = sizeof(name) / sizeof(name[0]);
     strcpy(lckFile, name);
     strcat(lckFile, ".lck");
     return lckFile;
