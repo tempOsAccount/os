@@ -92,6 +92,7 @@ function checkGameEnd {
 	checkCombo 3;
 	combo=${FIELD[6]}${FIELD[7]}${FIELD[8]};
 	checkCombo 6;
+
 	# вертикальные линии
 	combo=${FIELD[0]}${FIELD[3]}${FIELD[6]};
 	checkCombo 0;
@@ -99,11 +100,18 @@ function checkGameEnd {
 	checkCombo 1;
 	combo=${FIELD[2]}${FIELD[5]}${FIELD[8]};
 	checkCombo 2;
+
 	# диагонали
 	combo=${FIELD[0]}${FIELD[4]}${FIELD[8]};
 	checkCombo 0;
 	combo=${FIELD[2]}${FIELD[4]}${FIELD[6]};
 	checkCombo 2;
+
+	if [[ "$gameEnd" == true ]]
+	then
+		return;
+	fi
+
 	# ничья
 	empty=0;
 	for i in `seq 0 8`
