@@ -158,6 +158,17 @@ void serverHandler() {
 }
 
 int main(int argc, char *argv[]) {
+	if (argc > 1) {
+		FILE* fp;
+		fp = fopen(argv[1], "r");
+		for (int i = 0; i < HEIGHT; ++i) {
+			for (int j = 0; j < WIDTH; ++j) {
+				fscanf(fp, "%d", &field[i][j]);
+			}		
+		}	
+		fclose(fp);
+	}
+
 	int st;	
 	if (fork() != 0)
 		exit(0); 	
