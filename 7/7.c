@@ -158,6 +158,9 @@ void serverHandler() {
 }
 
 int main(int argc, char *argv[]) {
+	int st;	
+	if (fork() != 0)
+		exit(0); 	
 	pthread_t pth;
 	int error;
 	// запускаем поток для сервера
@@ -165,11 +168,12 @@ int main(int argc, char *argv[]) {
 		printf("Error with create server thread\n");
 		return 1;
 	}
+	
 	pthread_t life;
 	// потоки, которые считают конфигурацию жизни
 	while(1) {
-		printField();
-		printf("\n");
+		//printField();
+		//printf("\n");
 		if (error = pthread_create(&life, NULL, &lifeStep, NULL)) {
 			printf("Error with create life thread\n");
 			return 1;
