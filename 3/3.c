@@ -5,7 +5,6 @@
 #include <errno.h>
 
 int BUF_SIZE = 1000;
-int END = -1;
 
 int unpackSparse(char *name) {
 	int fd = open(name, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
@@ -17,6 +16,7 @@ int unpackSparse(char *name) {
 	char buffer[BUF_SIZE];
 	int nullCount = 0;
 	int error = 0;
+	int blocksWritten = 0;
 
 	while ((n = read(0, buffer, BUF_SIZE)) != 0) {
 		int i;
@@ -24,6 +24,7 @@ int unpackSparse(char *name) {
 			if (buffer[i] == 0) {
 				nullCount++;
 			} else {
+				++blocksWritten;
 				if (nullCount != 0)
 				error = lseek(fd, nullCount, SEEK_CUR);
 				nullCount = 0;	
@@ -36,8 +37,11 @@ int unpackSparse(char *name) {
 		}
 	}
 
-	lseek(fd, nullCount, SEEK_CUR);
-	write(fd, &END, 1);
+	if (blocksWritten == 0) {
+		ftruncate(fd, nullCount);
+	} else if (nullCount > 0) {
+		lseek(fd, nullCount, SEEK_CUR);
+	}
 	close(fd);
 	return 0;
 }
