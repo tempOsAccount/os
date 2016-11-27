@@ -105,6 +105,7 @@ int forkProc(int i) {
     case 0: 
         cpid = getpid();         //global PID  
         execvp(programs[i].name, programs[i].arguments);
+	sleep(5);
         exit(0);
         // родительский процесс
     default:
@@ -174,6 +175,11 @@ int startProcs() {
   return 0;
 }
 
+void goToBackground() {
+	if (fork() > 0)
+		exit(0);
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     printf("Need config file in argument\n");
@@ -183,6 +189,7 @@ int main(int argc, char *argv[]) {
   if (err) {
     return 1;
   }
+  //goToBackground();
   startProcs();
 
   return 0;
