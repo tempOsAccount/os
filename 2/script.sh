@@ -1,9 +1,25 @@
 #!/bin/bash
 
+pe=0
 prevPid=0
 
 while true; do
-	sleep 1s	
+	sleep 1s
+
+	if [[ "$prevPid" -gt 0 ]]
+	then
+		(ps -p $pid > /dev/null)
+		pe=$?
+		
+		if [[ "$pe" -eq 0 ]]
+		then
+			echo pid=$prevPid program still running
+			continue
+		else
+			echo pid=$prevPid program is gone!
+		fi
+	fi
+	
 	typeset -i pid=$(cat $1)	
 	
 	if [[ "$pid" -eq 0 ]]
@@ -12,14 +28,8 @@ while true; do
 		continue
 	fi
 
-	if [[ "$pid" == "$prevPid" ]]
-	then
-		echo pid=$prevPid program still running
-		continue
-	fi
-
 	(ps -p $pid > /dev/null)
-	pe="$?"
+	pe=$?
 
 	if [[ "$pe" -eq 0 ]]
 	then
