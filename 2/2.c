@@ -88,7 +88,7 @@ int writePid(pid_t pid, int i) {
     printf("cannot open file %s\n", fullName);
     return 1;
   }
-  fwrite(&pid, sizeof(pid_t), 1, fp);
+  fprintf(fp, "%ld", (long)pid);
   fclose(fp);
   return 0;
 }
