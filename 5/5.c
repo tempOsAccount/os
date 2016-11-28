@@ -87,7 +87,7 @@ void startDestination() {
 
 		int data[3];
 		for (int i = 0; i < THREADS; ++i) {	
-			if (read(output_pipes[i].r, data, sizeof(int) * 3)) {
+			if (FD_ISSET(output_pipes[i].r, &fdset) && read(output_pipes[i].r, data, sizeof(int) * 3)) {
 				flag = true;
 				matrix_3[data[0]][data[1]] = data[2];					
 			}
